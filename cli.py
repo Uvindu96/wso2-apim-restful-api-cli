@@ -181,14 +181,14 @@ def printApis():
 
 
 while True:
-    command = input("execute: ")
+    command = input("\033[1;32mexecute: \033[0;37m")
     if command == "exit":
         print("shutting down executor...")
         print()
         break
     elif command == "start":
         start()
-        print("Client registration is successful")
+        print("client registration is successful")
         print()
     elif command == "print tokens":
         printTokens()
@@ -213,3 +213,5 @@ while True:
     elif command == "refresh":
         refresh()
         print()
+    else:
+        print("command not found, refer the documentation in https://github.com/binodmx/wso2-apim-restful-api-cli\n")
