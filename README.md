@@ -8,9 +8,13 @@ exit
 
 ==publisher==
 create api
+
 view api @apiId
+
 update api @apiId
+
 delete api @apiId
+
 publish api @apiId
 
 ==store==
