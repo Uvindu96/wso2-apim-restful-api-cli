@@ -3,8 +3,6 @@ CLI to call RESTful API for WSO2 API Manager.
 
 Run `python3 cli.py` in Terminal.
 
-start
-
 ## Publisher
 
 print apis
