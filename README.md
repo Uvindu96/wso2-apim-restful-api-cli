@@ -5,7 +5,7 @@ Run `python3 cli.py` in Terminal.
 
 ## Publisher
 
-print apis
+view apis
 
 create api
 
