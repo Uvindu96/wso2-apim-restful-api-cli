@@ -10,6 +10,7 @@ createAccessToken = None
 publishAccessToken = None
 allApis = None
 
+
 def registerClient():
     url = "https://localhost:9443/client-registration/v0.14/register"
     headers = {
@@ -59,18 +60,21 @@ def getAllApis():
 
 
 def createApi():
+    name = input("\tName: ")
+    context = input("\tContext: ")
+
     url = "https://localhost:9443/api/am/publisher/v0.14/apis"
     headers = {
-        "Authorization": "Bearer %s" %createAccessToken,
+        "Authorization": "Bearer %s" % createAccessToken,
         "Content-Type": "application/json"
     }
     payload = json.dumps({
-        "name": "PizzaShackAPI",
-        "description": "This document describe a RESTFul API for Pizza Shack online pizza delivery store.\r\n",
-        "context": "/pizzashack",
+        "name": name,
+        "description": "This document describe a RESTFul API for AWS Lambda function invocations.\r\n",
+        "context": "/%s" % context,
         "version": "1.0.0",
         "provider": "admin",
-        "apiDefinition": "{\"paths\":{\"/order\":{\"post\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Create a new Order\",\"parameters\":[{\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Order object that needs to be added\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"201\":{\"headers\":{\"Location\":{\"description\":\"The URL of the newly created resource.\",\"type\":\"string\"}},\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Created.\"}}}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Return a list of available menu items\",\"parameters\":[],\"responses\":{\"200\":{\"headers\":{},\"schema\":{\"title\":\"Menu\",\"properties\":{\"list\":{\"items\":{\"$ref\":\"#/definitions/MenuItem\"},\"type\":\"array\"}},\"type\":\"object\"},\"description\":\"OK.\"}}}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"definitions\":{\"MenuItem\":{\"title\":\"Pizza menu Item\",\"properties\":{\"price\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"image\":{\"type\":\"string\"}},\"required\":[\"name\"]},\"Order\":{\"title\":\"Pizza Order\",\"properties\":{\"customerName\":{\"type\":\"string\"},\"delivered\":{\"type\":\"boolean\"},\"address\":{\"type\":\"string\"},\"pizzaType\":{\"type\":\"string\"},\"creditCardNumber\":{\"type\":\"string\"},\"quantity\":{\"type\":\"number\"},\"orderId\":{\"type\":\"string\"}},\"required\":[\"orderId\"]}},\"consumes\":[\"application/json\"],\"info\":{\"title\":\"PizzaShackAPI\",\"description\":\"This document describe a RESTFul API for Pizza Shack online pizza delivery store.\\n\",\"license\":{\"name\":\"Apache 2.0\",\"url\":\"http://www.apache.org/licenses/LICENSE-2.0.html\"},\"contact\":{\"email\":\"architecture@pizzashack.com\",\"name\":\"John Doe\",\"url\":\"http://www.pizzashack.com\"},\"version\":\"1.0.0\"}}",
+        "apiDefinition": "{\"paths\":{\"/get-rand\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Create a new Order\",\"parameters\":[{\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Order object that needs to be added\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"201\":{\"headers\":{\"Location\":{\"description\":\"The URL of the newly created resource.\",\"type\":\"string\"}},\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Created.\"}}}},\"/menu\":{\"get\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Return a list of available menu items\",\"parameters\":[],\"responses\":{\"200\":{\"headers\":{},\"schema\":{\"title\":\"Menu\",\"properties\":{\"list\":{\"items\":{\"$ref\":\"#/definitions/MenuItem\"},\"type\":\"array\"}},\"type\":\"object\"},\"description\":\"OK.\"}}}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"definitions\":{\"MenuItem\":{\"title\":\"Pizza menu Item\",\"properties\":{\"price\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"image\":{\"type\":\"string\"}},\"required\":[\"name\"]},\"Order\":{\"title\":\"Pizza Order\",\"properties\":{\"customerName\":{\"type\":\"string\"},\"delivered\":{\"type\":\"boolean\"},\"address\":{\"type\":\"string\"},\"pizzaType\":{\"type\":\"string\"},\"creditCardNumber\":{\"type\":\"string\"},\"quantity\":{\"type\":\"number\"},\"orderId\":{\"type\":\"integer\"}},\"required\":[\"orderId\"]}},\"consumes\":[\"application/json\"],\"info\":{\"title\":\"PizzaShackAPI\",\"description\":\"This document describe a RESTFul API for Pizza Shack online pizza delivery store.\\n\",\"license\":{\"name\":\"Apache 2.0\",\"url\":\"http://www.apache.org/licenses/LICENSE-2.0.html\"},\"contact\":{\"email\":\"architecture@pizzashack.com\",\"name\":\"John Doe\",\"url\":\"http://www.pizzashack.com\"},\"version\":\"1.0.0\"}}",
         "wsdlUri": None,
         "status": "CREATED",
         "responseCaching": "Disabled",
@@ -78,56 +82,74 @@ def createApi():
         "destinationStatsEnabled": False,
         "isDefaultVersion": False,
         "type": "HTTP",
-        "transport": [
-            "http",
-            "https"
+        "transport":    [
+          "http",
+          "https"
         ],
         "tags": ["pizza"],
         "tiers": ["Unlimited"],
-        "maxTps": {
-            "sandbox": 5000,
-            "production": 1000
+        "maxTps":    {
+          "sandbox": 5000,
+          "production": 1000
         },
         "visibility": "PUBLIC",
         "visibleRoles": [],
-        "endpointConfig": "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"sandbox_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"endpoint_type\":\"http\"}",
-        "endpointSecurity": {
-            "username": "user",
-            "type": "basic",
-            "password": "pass"
+        "endpointConfig": "{\"endpoint_type\":\"awslambda\",\"amznAccessKey\":\"AKIAYKM7AGNSTGM76FNK\",\"amznSecretKey\":\"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\"}",
+        "endpointSecurity":    {
+          "username": "user",
+          "type": "basic",
+          "password": "pass"
         },
         "gatewayEnvironments": "Production and Sandbox",
-        "sequences": [{"name": "json_validator", "type": "in"}, {"name": "log_out_message", "type": "out"}],
+        "sequences": [{"name":"json_validator","type": "in"},{"name":"log_out_message","type": "out"}],
         "subscriptionAvailability": None,
         "subscriptionAvailableTenants": [],
-        "businessInformation": {
-            "businessOwnerEmail": "marketing@pizzashack.com",
-            "technicalOwnerEmail": "architecture@pizzashack.com",
-            "technicalOwner": "John Doe",
-            "businessOwner": "Jane Roe"
+        "businessInformation":    {
+          "businessOwnerEmail": "marketing@pizzashack.com",
+          "technicalOwnerEmail": "architecture@pizzashack.com",
+          "technicalOwner": "John Doe",
+          "businessOwner": "Jane Roe"
         },
-        "corsConfiguration": {
-            "accessControlAllowOrigins": ["*"],
-            "accessControlAllowHeaders": [
-                "authorization",
-                "Access-Control-Allow-Origin",
-                "Content-Type",
-                "SOAPAction"
-            ],
-            "accessControlAllowMethods": [
-                "GET",
-                "PUT",
-                "POST",
-                "DELETE",
-                "PATCH",
-                "OPTIONS"
-            ],
-            "accessControlAllowCredentials": False,
-            "corsConfigurationEnabled": False
-        }
+        "corsConfiguration":    {
+          "accessControlAllowOrigins": ["*"],
+          "accessControlAllowHeaders":       [
+             "authorization",
+             "Access-Control-Allow-Origin",
+             "Content-Type",
+             "SOAPAction"
+          ],
+          "accessControlAllowMethods":       [
+             "GET",
+             "PUT",
+             "POST",
+             "DELETE",
+             "PATCH",
+             "OPTIONS"
+          ],
+          "accessControlAllowCredentials": False,
+          "corsConfigurationEnabled": False
+       }
     })
     response = requests.post(url, headers=headers, data=payload, verify=False)
     return response.json()
+
+
+def viewApi(apiId):
+    url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response.json()
+
+
+def deleteApi(apiId):
+    url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    response = requests.delete(url, headers=headers, verify=False)
+    return response
 
 
 def publishApi(apiId):
@@ -180,16 +202,15 @@ def printApis():
         print(api)
 
 
+start()
+print("client registration is successful\n")
+
 while True:
-    command = input("\033[1;32mexecute: \033[0;37m")
+    command = input("\033[1;32mexecute: \033[0;37m").strip()
     if command == "exit":
-        print("shutting down executor...")
+        print("shutting down cli...")
         print()
         break
-    elif command == "start":
-        start()
-        print("client registration is successful")
-        print()
     elif command == "print tokens":
         printTokens()
         print()
@@ -200,14 +221,18 @@ while True:
         print(createApi())
         refresh()
         print()
-    elif command == "read api":
+    elif command.startswith("view api"):
+        apiId = command.split("@")[1]
+        print(json.dumps(viewApi(apiId), indent=4, sort_keys=True))
         print()
-    elif command == "update api":
+    elif command.startswith("update api"):
         print()
-    elif command == "delete api":
+    elif command.startswith("delete api"):
+        apiId = command.split("@")[1]
+        print(deleteApi(apiId))
         print()
     elif command.startswith("publish api"):
-        apiId = command.strip().split("@")[1]
+        apiId = command.split("@")[1]
         publishApi(apiId)
         print()
     elif command == "refresh":
