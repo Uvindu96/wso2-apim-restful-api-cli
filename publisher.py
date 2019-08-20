@@ -4,11 +4,6 @@ import base64
 
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
-clientData = None
-viewAccessToken = None
-createAccessToken = None
-publishAccessToken = None
-
 
 # return json
 def registerClient():
@@ -25,13 +20,11 @@ def registerClient():
         "saasApp": True
     })
     response = requests.post(url, headers=headers, data=payload, verify=False)
-    global clientData
-    clientData = response
     return response.json()
 
 
 # return json
-def generateAccessToken(scope):
+def generateAccessToken(clientData, scope):
     url = "https://localhost:8243/token"
     headers = {
         "Authorization": "Basic " + base64.b64encode(str(clientData['clientId'] + ":" + clientData['clientSecret']).encode()).decode("utf-8")
@@ -43,20 +36,11 @@ def generateAccessToken(scope):
         "scope": scope
     }
     response = requests.post(url, headers=headers, params=params, verify=False)
-    global viewAccessToken
-    global createAccessToken
-    global publishAccessToken
-    if scope == 'apim:api_view':
-        viewAccessToken = response.json()['access_token']
-    elif scope == 'apim:api_create':
-        createAccessToken = response.json()['access_token']
-    elif scope == 'apim:api_publish':
-        publishAccessToken = response.json()['access_token']
     return response.json()
 
 
 # return json
-def viewApis():
+def viewApis(viewAccessToken):
     url = "https://localhost:9443/api/am/publisher/v0.14/apis"
     headers = {
         "Authorization": "Bearer %s" % viewAccessToken,
@@ -73,7 +57,7 @@ def viewApis():
 
 
 # return json
-def createApi():
+def createApi(createAccessToken):
     name = input("\tName: ")
     context = input("\tContext: ")
 
@@ -88,7 +72,7 @@ def createApi():
         "context": "/%s" % context,
         "version": "1.0.0",
         "provider": "admin",
-        "apiDefinition":  "{\"paths\":{\"/order\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Create a new Order\",\"parameters\":[{\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Order object that needs to be added\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"201\":{\"headers\":{\"Location\":{\"description\":\"The URL of the newly created resource.\",\"type\":\"string\"}},\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Created.\"}}}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Return a list of available menu items\",\"parameters\":[],\"responses\":{\"200\":{\"headers\":{},\"schema\":{\"title\":\"Menu\",\"properties\":{\"list\":{\"items\":{\"$ref\":\"#/definitions/MenuItem\"},\"type\":\"array\"}},\"type\":\"object\"},\"description\":\"OK.\"}}}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"definitions\":{\"MenuItem\":{\"title\":\"Pizza menu Item\",\"properties\":{\"price\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"image\":{\"type\":\"string\"}},\"required\":[\"name\"]},\"Order\":{\"title\":\"Pizza Order\",\"properties\":{\"customerName\":{\"type\":\"string\"},\"delivered\":{\"type\":\"boolean\"},\"address\":{\"type\":\"string\"},\"pizzaType\":{\"type\":\"string\"},\"creditCardNumber\":{\"type\":\"string\"},\"quantity\":{\"type\":\"number\"},\"orderId\":{\"type\":\"string\"}},\"required\":[\"orderId\"]}},\"consumes\":[\"application/json\"],\"info\":{\"title\":\"PizzaShackAPI\",\"description\":\"This document describe a RESTFul API for Pizza Shack online pizza delivery store.\\n\",\"license\":{\"name\":\"Apache 2.0\",\"url\":\"http://www.apache.org/licenses/LICENSE-2.0.html\"},\"contact\":{\"email\":\"architecture@pizzashack.com\",\"name\":\"John Doe\",\"url\":\"http://www.pizzashack.com\"},\"version\":\"1.0.0\"}}",
+        "apiDefinition":  "{\"paths\":{\"/get-random-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}, \"/get-rand-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"PizzaShackAPI2\",\"version\":\"1.0.0\"}}",
         "wsdlUri": None,
         "status": "CREATED",
         "responseCaching": "Disabled",
@@ -149,7 +133,7 @@ def createApi():
 
 
 # return json
-def viewApi(apiId):
+def viewApi(viewAccessToken, apiId):
     url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s" % apiId
     headers = {
         "Authorization": "Bearer %s" % viewAccessToken
@@ -159,7 +143,7 @@ def viewApi(apiId):
 
 
 # return json
-def deleteApi(apiId):
+def deleteApi(createAccessToken, apiId):
     url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s" % apiId
     headers = {
         "Authorization": "Bearer %s" % createAccessToken
@@ -168,8 +152,8 @@ def deleteApi(apiId):
     return response.json()
 
 
-# return json
-def publishApi(apiId):
+# return response code
+def publishApi(publishAccessToken, apiId):
     url = "https://localhost:9443/api/am/publisher/v0.14/apis/change-lifecycle"
     headers = {
         "Authorization": "Bearer %s" % publishAccessToken
@@ -179,11 +163,11 @@ def publishApi(apiId):
         "action": "Publish"
     }
     response = requests.post(url, headers=headers, params=params, verify=False)
-    return response.json()
+    return response
 
 
 # return json
-def viewSwaggerApi(apiId):
+def viewSwaggerApi(viewAccessToken, apiId):
     url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s/swagger" % apiId
     headers = {
         "Authorization": "Bearer %s" % viewAccessToken
