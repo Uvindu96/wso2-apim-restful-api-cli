@@ -2,12 +2,27 @@ import requests
 import json
 import base64
 
+
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 
-# return json
+'''
+Introduction
+'''
+
+
+host = "https://localhost:9443"
+basePath = "/api/am/publisher/v0.14"
+
+
+'''
+Getting started
+'''
+
+
+# return response
 def registerClient():
-    url = "https://localhost:9443/client-registration/v0.14/register"
+    url = host + "/client-registration/v0.14/register"
     headers = {
         "Authorization": "Basic YWRtaW46YWRtaW4=",
         "Content-Type": "application/json"
@@ -20,10 +35,10 @@ def registerClient():
         "saasApp": True
     })
     response = requests.post(url, headers=headers, data=payload, verify=False)
-    return response.json()
+    return response
 
 
-# return json
+# return response
 def generateAccessToken(clientData, scope):
     url = "https://localhost:8243/token"
     headers = {
@@ -36,12 +51,17 @@ def generateAccessToken(clientData, scope):
         "scope": scope
     }
     response = requests.post(url, headers=headers, params=params, verify=False)
-    return response.json()
+    return response
 
 
-# return json
+'''
+API (Collection)
+'''
+
+
+# return response
 def viewApis(viewAccessToken):
-    url = "https://localhost:9443/api/am/publisher/v0.14/apis"
+    url = host + basePath + "/apis"
     headers = {
         "Authorization": "Bearer %s" % viewAccessToken,
         "Accept": "application/json",
@@ -53,126 +73,161 @@ def viewApis(viewAccessToken):
         "offset": 0
     }
     response = requests.get(url, headers=headers, params=params, verify=False)
-    return response.json()
+    return response
 
 
-# return json
-def createApi(createAccessToken):
-    name = input("\tName: ")
-    context = input("\tContext: ")
-
-    url = "https://localhost:9443/api/am/publisher/v0.14/apis"
-    headers = {
-        "Authorization": "Bearer %s" % createAccessToken,
-        "Content-Type": "application/json"
-    }
-    payload = json.dumps({
-        "name": name,
-        "description": "This document describe a RESTFul API for AWS Lambda function invocations.\r\n",
-        "context": "/%s" % context,
-        "version": "1.0.0",
-        "provider": "admin",
-        "apiDefinition":  "{\"paths\":{\"/get-random-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}, \"/get-rand-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"PizzaShackAPI2\",\"version\":\"1.0.0\"}}",
-        "wsdlUri": None,
-        "status": "CREATED",
-        "responseCaching": "Disabled",
-        "cacheTimeout": 300,
-        "destinationStatsEnabled": False,
-        "isDefaultVersion": False,
-        "type": "HTTP",
-        "transport":    [
-          "http",
-          "https"
-        ],
-        "tags": ["pizza"],
-        "tiers": ["Unlimited"],
-        "maxTps":    {
-          "sandbox": 5000,
-          "production": 1000
-        },
-        "visibility": "PUBLIC",
-        "visibleRoles": [],
-        "endpointConfig": "{\"endpoint_type\":\"awslambda\",\"amznAccessKey\":\"AKIAYKM7AGNSTGM76FNK\",\"amznSecretKey\":\"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\"}",
-        "endpointSecurity":    {
-          "username": "user",
-          "type": "basic",
-          "password": "pass"
-        },
-        "gatewayEnvironments": "Production and Sandbox",
-        "sequences": [{"name":"json_validator","type": "in"},{"name":"log_out_message","type": "out"}],
-        "subscriptionAvailability": None,
-        "subscriptionAvailableTenants": [],
-        "businessInformation":    {
-          "businessOwnerEmail": "marketing@pizzashack.com",
-          "technicalOwnerEmail": "architecture@pizzashack.com",
-          "technicalOwner": "John Doe",
-          "businessOwner": "Jane Roe"
-        },
-        "corsConfiguration":    {
-          "accessControlAllowOrigins": ["*"],
-          "accessControlAllowHeaders":       [
-             "authorization",
-             "Access-Control-Allow-Origin",
-             "Content-Type",
-             "SOAPAction"
-          ],
-          "accessControlAllowMethods":       [
-             "GET",
-             "PUT",
-             "POST",
-             "DELETE",
-             "PATCH",
-             "OPTIONS"
-          ],
-          "accessControlAllowCredentials": False,
-          "corsConfigurationEnabled": False
-       }
-    })
-    response = requests.post(url, headers=headers, data=payload, verify=False)
-    return response.json()
+'''
+API (Individual)
+'''
 
 
-# return json
-def viewApi(viewAccessToken, apiId):
-    url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s" % apiId
-    headers = {
-        "Authorization": "Bearer %s" % viewAccessToken
-    }
-    response = requests.get(url, headers=headers, verify=False)
-    return response.json()
-
-
-# return json
+# return response
 def deleteApi(createAccessToken, apiId):
-    url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s" % apiId
+    url = host + basePath + "/apis/%s" % apiId
     headers = {
         "Authorization": "Bearer %s" % createAccessToken
     }
     response = requests.delete(url, headers=headers, verify=False)
-    return response.json()
+    return response
 
 
-# return response code
-def publishApi(publishAccessToken, apiId):
-    url = "https://localhost:9443/api/am/publisher/v0.14/apis/change-lifecycle"
+# return response
+def viewApi(viewAccessToken, apiId):
+    url = host + basePath + "/apis/%s" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# return response
+def updateApi(createAccessToken, apiId, jsonFileName):
+    url = host + basePath + "/apis/%s" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    with open(jsonFileName) as jsonFile:
+        payload = json.dumps(json.load(jsonFile))
+    response = requests.put(url, headers=headers, data=payload, verify=False)
+    return response
+
+
+# return response
+def viewResourcePolicyDefinitions(viewAccessToken, apiId):
+    url = host + basePath + "/apis/%s/resource-policies" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# return response
+def viewResourcePolicyDefinition(viewAccessToken, apiId, resourceId):
+    url = host + basePath + "/apis/%s/resource-policies/%s" % apiId, resourceId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# return response
+def updateResourcePolicyDefinition(createAccessToken, apiId, resourceId, resourcePolicyDefinitionFileName):
+    url = host + basePath + "/apis/%s/resource-policies/%s" % apiId, resourceId
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    with open(resourcePolicyDefinitionFileName, "r") as resourcePolicyDefinitionFile:
+        files = {"apiDefinition": resourcePolicyDefinitionFile.read()}
+    response = requests.put(url, headers=headers, files=files, verify=False)
+    return response
+
+
+# return response
+def viewSwaggerDefinition(viewAccessToken, apiId):
+    url = host + basePath + "/apis/%s/swagger" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# return response
+def updateSwaggerDefinition(createAccessToken, apiId, swaggerDefinitionFileName):
+    url = host + basePath + "/apis/%s/swagger" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    with open(swaggerDefinitionFileName, "r") as swaggerDefinitionFile:
+        files = {"apiDefinition": swaggerDefinitionFile.read()}
+    response = requests.put(url, headers=headers, files=files, verify=False)
+    return response
+
+
+# return response
+def downloadThumbnailImage(viewAccessToken, apiId):
+    url = host + basePath + "/apis/%s/thumbnail" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    if response.status_code == 200:
+        with open("thumbnail.jpg", 'wb') as imgFile:
+            imgFile.write(response.content)
+    return response
+
+
+# return response
+def uploadThumbnailImage(createAccessToken, apiId, imgFileName):
+    url = host + basePath + "/apis/%s/thumbnail" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    files = {"file": open(imgFileName, "rb")}
+    response = requests.post(url, headers=headers, files=files, verify=False)
+    return response
+
+
+# return response
+def changeApiStatus(publishAccessToken, apiId, action):
+    url = host + basePath + "/apis/change-lifecycle"
     headers = {
         "Authorization": "Bearer %s" % publishAccessToken
     }
     params = {
         "apiId": apiId,
-        "action": "Publish"
+        "action": action
     }
     response = requests.post(url, headers=headers, params=params, verify=False)
     return response
 
 
-# return json
-def viewSwaggerApi(viewAccessToken, apiId):
-    url = "https://localhost:9443/api/am/publisher/v0.14/apis/%s/swagger" % apiId
+# return response
+def createApiVersion(createAccessToken, apiId, newVersion):
+    url = host + basePath + "/apis/copy-api"
     headers = {
-        "Authorization": "Bearer %s" % viewAccessToken
+        "Authorization": "Bearer %s" % createAccessToken,
+        "Content-Type": "application/json"
     }
-    response = requests.get(url, headers=headers, verify=False)
-    return response.json()
+    params = {
+        "apiId": apiId,
+        "newVersion": newVersion
+    }
+    response = requests.post(url, headers=headers, params=params, verify=False)
+    return response
 
 
+# return response
+def createApi(createAccessToken, jsonFileName):
+    url = host + basePath + "/apis"
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken,
+        "Content-Type": "application/json"
+    }
+    with open(jsonFileName) as jsonFile:
+        payload = json.dumps(json.load(jsonFile))
+    response = requests.post(url, headers=headers, data=payload, verify=False)
+    return response
