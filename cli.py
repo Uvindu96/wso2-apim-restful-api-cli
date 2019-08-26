@@ -2,7 +2,6 @@ import publisher
 import store
 import admin
 import json
-import pyperclip
 
 
 clientData = None
@@ -134,9 +133,10 @@ while True:
         response = publisher.uploadThumbnailImage(createAccessToken, apiId, imgFileName)
         print(response)
 
-    elif command.startswith("publish api @"):
+    elif command.startswith("change api status @"):
         apiId = command.split("@")[1]
-        response = publisher.changeApiStatus(publishAccessToken, apiId, "Publish")
+        action = input("Enter status: ")
+        response = publisher.changeApiStatus(publishAccessToken, apiId, action)
         print(response)
 
     elif command.startswith("create api version @"):
@@ -152,7 +152,6 @@ while True:
         response = publisher.createApi(createAccessToken, jsonFileName)
         print(response)
         if response.status_code == 201:
-            pyperclip.copy(response.json()['id'])
             print(json.dumps(response.json(), indent=4, sort_keys=True))
 
     else:
