@@ -55,14 +55,26 @@ while True:
         print(refresh())
     elif command == "print tokens":
         printTokens()
+
+# publisher ============================================================================================================
     elif command.startswith("view apis"):
-        print(json.dumps(publisher.viewApis(viewAccessToken).json(), indent=4, sort_keys=True))
+        response = publisher.viewApis(viewAccessToken)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("delete api @"):
         apiId = command.split("@")[1]
-        print(publisher.deleteApi(createAccessToken, apiId))
+        response = publisher.deleteApi(createAccessToken, apiId)
+        print(response)
+
     elif command.startswith("view api @"):
         apiId = command.split("@")[1]
-        print(json.dumps(publisher.viewApi(viewAccessToken, apiId).json(), indent=4, sort_keys=True))
+        response = publisher.viewApi(viewAccessToken, apiId)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("update api @"):
         apiId = command.split("@")[1]
         jsonFileName = input("Enter json file name containing the payload: ")
@@ -70,39 +82,70 @@ while True:
         print(response)
         if response.status_code == 200:
             print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("view resource policies @"):
         apiId = command.split("@")[1]
-        print(publisher.viewResourcePolicyDefinitions(viewAccessToken, apiId).json())
+        response = publisher.viewResourcePolicyDefinitions(viewAccessToken, apiId)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("view resource policy @"):
         apiId = command.split("@")[1]
         resourceId = input("Enter resource id: ")
-        print(publisher.viewResourcePolicyDefinition(viewAccessToken, apiId, resourceId).json())
+        response = publisher.viewResourcePolicyDefinition(viewAccessToken, apiId, resourceId)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("update resource policy @"):
         apiId = command.split("@")[1]
         resourceId = input("Enter resource id: ")
         resourcePolicyDefinitionFileName = input("Enter file name containing the resource policy definition: ")
-        print(publisher.updateResourcePolicyDefinition(createAccessToken, apiId, resourceId, resourcePolicyDefinitionFileName).json())
+        response = publisher.updateResourcePolicyDefinition(createAccessToken, apiId, resourceId, resourcePolicyDefinitionFileName)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("view swagger @"):
         apiId = command.split("@")[1]
-        print(json.dumps(publisher.viewSwaggerApi(viewAccessToken, apiId), indent=4, sort_keys=True).json())
+        response = publisher.viewSwaggerDefinition(viewAccessToken, apiId)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("update swagger @"):
         apiId = command.split("@")[1]
         swaggerDefinitionFileName = input("Enter file name containing the swagger definition: ")
-        print(publisher.updateSwaggerDefinition(createAccessToken, apiId, swaggerDefinitionFileName).json())
+        response = publisher.updateSwaggerDefinition(createAccessToken, apiId, swaggerDefinitionFileName)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("download thumbnail @"):
         apiId = command.split("@")[1]
-        print(publisher.downloadThumbnailImage(viewAccessToken, apiId))
+        response = publisher.downloadThumbnailImage(viewAccessToken, apiId)
+        print(response)
+
     elif command.startswith("upload thumbnail @"):
         apiId = command.split("@")[1]
         imgFileName = input("Enter image file name: ")
-        print(publisher.uploadThumbnailImage(createAccessToken, apiId, imgFileName))
+        response = publisher.uploadThumbnailImage(createAccessToken, apiId, imgFileName)
+        print(response)
+
     elif command.startswith("publish api @"):
         apiId = command.split("@")[1]
-        print(publisher.changeApiStatus(publishAccessToken, apiId, "Publish"))
+        response = publisher.changeApiStatus(publishAccessToken, apiId, "Publish")
+        print(response)
+
     elif command.startswith("create api version @"):
         apiId = command.split("@")[1]
         newVersion = input("Enter version: ")
-        print(publisher.createApiVersion(createAccessToken, apiId, newVersion).json())
+        response = publisher.createApiVersion(createAccessToken, apiId, newVersion)
+        print(response)
+        if response.status_code == 200:
+            print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     elif command.startswith("create api"):
         jsonFileName = input("Enter json file name containing the payload: ")
         response = publisher.createApi(createAccessToken, jsonFileName)
@@ -110,6 +153,7 @@ while True:
         if response.status_code == 201:
             pyperclip.copy(response.json()['id'])
             print(json.dumps(response.json(), indent=4, sort_keys=True))
+
     else:
         print("command not found, refer the documentation in https://github.com/binodmx/wso2-apim-restful-api-cli")
     print()

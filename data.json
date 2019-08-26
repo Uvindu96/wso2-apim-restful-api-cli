@@ -1,7 +1,7 @@
 {
-    "name": "AWSLambda112",
+    "name": "AWSLambda100",
     "description": "This document describe a RESTFul API for AWS Lambda function invocations.\r\n",
-    "context": "/lambda112",
+    "context": "/lambda100",
     "version": "1.0.0",
     "provider": "admin",
     "apiDefinition":  "{\"paths\":{\"/get-random-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"PizzaShackAPI2\",\"version\":\"1.0.0\"}}",

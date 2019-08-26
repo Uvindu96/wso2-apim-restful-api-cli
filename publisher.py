@@ -105,7 +105,8 @@ def viewApi(viewAccessToken, apiId):
 def updateApi(createAccessToken, apiId, jsonFileName):
     url = host + basePath + "/apis/%s" % apiId
     headers = {
-        "Authorization": "Bearer %s" % createAccessToken
+        "Authorization": "Bearer %s" % createAccessToken,
+        "Content-Type": "application/json"
     }
     with open(jsonFileName) as jsonFile:
         payload = json.dumps(json.load(jsonFile))
@@ -227,7 +228,10 @@ def createApi(createAccessToken, jsonFileName):
         "Authorization": "Bearer %s" % createAccessToken,
         "Content-Type": "application/json"
     }
-    with open(jsonFileName) as jsonFile:
-        payload = json.dumps(json.load(jsonFile))
+    try:
+        with open(jsonFileName) as jsonFile:
+            payload = json.dumps(json.load(jsonFile))
+    except:
+        payload = ""
     response = requests.post(url, headers=headers, data=payload, verify=False)
     return response

@@ -2,18 +2,18 @@
     "accessControl": "NONE",
     "accessControlRoles": [],
     "additionalProperties": {},
-    "apiDefinition": "{\"paths\":{\"/get-random-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"PizzaShackAPI2\",\"version\":\"1.0.0\"}}",
+    "apiDefinition": "{\"paths\":{\"/order\":{\"post\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Create a new Order\",\"parameters\":[{\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Order object that needs to be added\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"201\":{\"headers\":{\"Location\":{\"description\":\"The URL of the newly created resource.\",\"type\":\"string\"}},\"schema\":{\"$ref\":\"#/definitions/Order\"},\"description\":\"Created.\"}}}},\"/menu\":{\"get\":{\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Return a list of available menu items\",\"parameters\":[],\"responses\":{\"200\":{\"headers\":{},\"schema\":{\"title\":\"Menu\",\"properties\":{\"list\":{\"items\":{\"$ref\":\"#/definitions/MenuItem\"},\"type\":\"array\"}},\"type\":\"object\"},\"description\":\"OK.\"}}}}},\"schemes\":[\"https\"],\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"definitions\":{\"MenuItem\":{\"title\":\"Pizza menu Item\",\"properties\":{\"price\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"name\":{\"type\":\"string\"},\"image\":{\"type\":\"string\"}},\"required\":[\"name\"]},\"Order\":{\"title\":\"Pizza Order\",\"properties\":{\"customerName\":{\"type\":\"string\"},\"delivered\":{\"type\":\"boolean\"},\"address\":{\"type\":\"string\"},\"pizzaType\":{\"type\":\"string\"},\"creditCardNumber\":{\"type\":\"string\"},\"quantity\":{\"type\":\"number\"},\"orderId\":{\"type\":\"string\"}},\"required\":[\"orderId\"]}},\"consumes\":[\"application/json\"],\"info\":{\"title\":\"PizzaShackAPI\",\"description\":\"This document describe a RESTFul API for Pizza Shack online pizza delivery store.\\n\",\"license\":{\"name\":\"Apache 2.0\",\"url\":\"http://www.apache.org/licenses/LICENSE-2.0.html\"},\"contact\":{\"email\":\"architecture@pizzashack.com\",\"name\":\"John Doe\",\"url\":\"http://www.pizzashack.com\"},\"version\":\"1.0.0\"}}",
     "apiLevelPolicy": null,
     "apiSecurity": "oauth2,oauth_basic_auth_mandatory",
     "authorizationHeader": null,
     "businessInformation": {
-        "businessOwner": "Jane Roe",
+        "businessOwner": "Jane Roes",
         "businessOwnerEmail": "marketing@pizzashack.com",
-        "technicalOwner": "John Doe",
+        "technicalOwner": "John Does",
         "technicalOwnerEmail": "architecture@pizzashack.com"
     },
     "cacheTimeout": 300,
-    "context": "/lambda5",
+    "context": "/pizzashack99",
     "corsConfiguration": {
         "accessControlAllowCredentials": false,
         "accessControlAllowHeaders": [
@@ -35,23 +35,23 @@
         ],
         "corsConfigurationEnabled": false
     },
-    "description": "This document describes a RESTFul API for AWS Lambda function invocations.\r\n",
+    "description": "This document describe a RESTFul API for Pizza Shack online pizza delivery store.\r\n",
     "destinationStatsEnabled": null,
-    "endpointConfig": "{\"endpoint_type\":\"awslambda\",\"amznAccessKey\":\"AKIAYKM7AGNSTGM76FNK\",\"amznSecretKey\":\"mm1ZhCC6AhP0zNxU9MQaS3Ix7Ndc9Hp+7TolgZxV\"}",
+    "endpointConfig": "{\"production_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"sandbox_endpoints\":{\"url\":\"https://localhost:9443/am/sample/pizzashack/v1/api/\",\"config\":null},\"endpoint_type\":\"http\"}",
     "endpointSecurity": {
         "password": "",
         "type": "basic",
         "username": "user"
     },
     "gatewayEnvironments": "Production and Sandbox",
-    "id": "f5555416-7887-41c4-8b19-0c6eb9d16604",
+    "id": "9ce35581-ea7f-4c31-8c9a-ca90edb601f7",
     "isDefaultVersion": false,
     "labels": [],
     "maxTps": {
         "production": 1000,
         "sandbox": 5000
     },
-    "name": "BENZ",
+    "name": "PizzaShackAPI99",
     "provider": "admin",
     "responseCaching": "Disabled",
     "sequences": [
@@ -74,7 +74,7 @@
     "tags": [
         "pizza"
     ],
-    "thumbnailUri": "/apis/f5555416-7887-41c4-8b19-0c6eb9d16604/thumbnail",
+    "thumbnailUri": null,
     "tiers": [
         "Unlimited"
     ],
