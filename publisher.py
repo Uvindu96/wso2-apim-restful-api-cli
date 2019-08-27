@@ -6,21 +6,16 @@ import base64
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 
-'''
-Introduction
-'''
+# Introduction
 
 
 host = "https://localhost:9443"
 basePath = "/api/am/publisher/v0.14"
 
 
-'''
-Getting started
-'''
+# Getting started
 
 
-# return response
 def registerClient():
     url = host + "/client-registration/v0.14/register"
     headers = {
@@ -38,7 +33,6 @@ def registerClient():
     return response
 
 
-# return response
 def generateAccessToken(clientData, scope):
     url = "https://localhost:8243/token"
     headers = {
@@ -54,12 +48,9 @@ def generateAccessToken(clientData, scope):
     return response
 
 
-'''
-API (Collection)
-'''
+# API (Collection)
 
 
-# return response
 def viewApis(viewAccessToken):
     url = host + basePath + "/apis"
     headers = {
@@ -76,12 +67,9 @@ def viewApis(viewAccessToken):
     return response
 
 
-'''
-API (Individual)
-'''
+# API (Individual)
 
 
-# return response
 def deleteApi(createAccessToken, apiId):
     url = host + basePath + "/apis/%s" % apiId
     headers = {
@@ -91,7 +79,6 @@ def deleteApi(createAccessToken, apiId):
     return response
 
 
-# return response
 def viewApi(viewAccessToken, apiId):
     url = host + basePath + "/apis/%s" % apiId
     headers = {
@@ -101,20 +88,21 @@ def viewApi(viewAccessToken, apiId):
     return response
 
 
-# return response
 def updateApi(createAccessToken, apiId, jsonFileName):
     url = host + basePath + "/apis/%s" % apiId
     headers = {
         "Authorization": "Bearer %s" % createAccessToken,
         "Content-Type": "application/json"
     }
-    with open(jsonFileName) as jsonFile:
-        payload = json.dumps(json.load(jsonFile))
+    try:
+        with open(jsonFileName) as jsonFile:
+            payload = json.dumps(json.load(jsonFile))
+    except:
+        payload = "{}"
     response = requests.put(url, headers=headers, data=payload, verify=False)
     return response
 
 
-# return response
 def viewResourcePolicyDefinitions(viewAccessToken, apiId):
     url = host + basePath + "/apis/%s/resource-policies" % apiId
     headers = {
@@ -124,7 +112,6 @@ def viewResourcePolicyDefinitions(viewAccessToken, apiId):
     return response
 
 
-# return response
 def viewResourcePolicyDefinition(viewAccessToken, apiId, resourceId):
     url = host + basePath + "/apis/%s/resource-policies/%s" % apiId, resourceId
     headers = {
@@ -134,19 +121,20 @@ def viewResourcePolicyDefinition(viewAccessToken, apiId, resourceId):
     return response
 
 
-# return response
 def updateResourcePolicyDefinition(createAccessToken, apiId, resourceId, resourcePolicyDefinitionFileName):
     url = host + basePath + "/apis/%s/resource-policies/%s" % apiId, resourceId
     headers = {
         "Authorization": "Bearer %s" % createAccessToken
     }
-    with open(resourcePolicyDefinitionFileName, "r") as resourcePolicyDefinitionFile:
-        files = {"apiDefinition": resourcePolicyDefinitionFile.read()}
+    try:
+        with open(resourcePolicyDefinitionFileName, "r") as resourcePolicyDefinitionFile:
+            files = {"apiDefinition": resourcePolicyDefinitionFile.read()}
+    except:
+        files = {}
     response = requests.put(url, headers=headers, files=files, verify=False)
     return response
 
 
-# return response
 def viewSwaggerDefinition(viewAccessToken, apiId):
     url = host + basePath + "/apis/%s/swagger" % apiId
     headers = {
@@ -156,19 +144,20 @@ def viewSwaggerDefinition(viewAccessToken, apiId):
     return response
 
 
-# return response
 def updateSwaggerDefinition(createAccessToken, apiId, swaggerDefinitionFileName):
     url = host + basePath + "/apis/%s/swagger" % apiId
     headers = {
         "Authorization": "Bearer %s" % createAccessToken
     }
-    with open(swaggerDefinitionFileName, "r") as swaggerDefinitionFile:
-        files = {"apiDefinition": swaggerDefinitionFile.read()}
+    try:
+        with open(swaggerDefinitionFileName, "r") as swaggerDefinitionFile:
+            files = {"apiDefinition": swaggerDefinitionFile.read()}
+    except:
+        files = {}
     response = requests.put(url, headers=headers, files=files, verify=False)
     return response
 
 
-# return response
 def downloadThumbnailImage(viewAccessToken, apiId):
     url = host + basePath + "/apis/%s/thumbnail" % apiId
     headers = {
@@ -181,18 +170,19 @@ def downloadThumbnailImage(viewAccessToken, apiId):
     return response
 
 
-# return response
 def uploadThumbnailImage(createAccessToken, apiId, imgFileName):
     url = host + basePath + "/apis/%s/thumbnail" % apiId
     headers = {
         "Authorization": "Bearer %s" % createAccessToken
     }
-    files = {"file": open(imgFileName, "rb")}
+    try:
+        files = {"file": open(imgFileName, "rb")}
+    except:
+        files = {}
     response = requests.post(url, headers=headers, files=files, verify=False)
     return response
 
 
-# return response
 def changeApiStatus(publishAccessToken, apiId, action):
     url = host + basePath + "/apis/change-lifecycle"
     headers = {
@@ -206,7 +196,6 @@ def changeApiStatus(publishAccessToken, apiId, action):
     return response
 
 
-# return response
 def createApiVersion(createAccessToken, apiId, newVersion):
     url = host + basePath + "/apis/copy-api"
     headers = {
@@ -221,7 +210,6 @@ def createApiVersion(createAccessToken, apiId, newVersion):
     return response
 
 
-# return response
 def createApi(createAccessToken, jsonFileName):
     url = host + basePath + "/apis"
     headers = {
@@ -232,6 +220,9 @@ def createApi(createAccessToken, jsonFileName):
         with open(jsonFileName) as jsonFile:
             payload = json.dumps(json.load(jsonFile))
     except:
-        payload = ""
+        payload = "{}"
     response = requests.post(url, headers=headers, data=payload, verify=False)
     return response
+
+
+# Application (Individual)
