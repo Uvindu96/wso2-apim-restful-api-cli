@@ -26,15 +26,18 @@ def start():
 
 
 def refresh():
-    global clientData
-    global viewAccessToken
-    global createAccessToken
-    global publishAccessToken
-    clientData = publisher.registerClient().json()
-    viewAccessToken = publisher.generateAccessToken(clientData, 'apim:api_view').json()['access_token']
-    createAccessToken = publisher.generateAccessToken(clientData, 'apim:api_create').json()['access_token']
-    publishAccessToken = publisher.generateAccessToken(clientData, 'apim:api_publish').json()['access_token']
-    return "System is refreshed."
+    try:
+        global clientData
+        global viewAccessToken
+        global createAccessToken
+        global publishAccessToken
+        clientData = publisher.registerClient().json()
+        viewAccessToken = publisher.generateAccessToken(clientData, 'apim:api_view').json()['access_token']
+        createAccessToken = publisher.generateAccessToken(clientData, 'apim:api_create').json()['access_token']
+        publishAccessToken = publisher.generateAccessToken(clientData, 'apim:api_publish').json()['access_token']
+        return "System is refreshed."
+    except:
+        return "\033[1;31mError while refreshing.. Check wheather apim is running\033[0;37m"
 
 
 def printTokens():
