@@ -168,5 +168,5 @@ while True:
             print(response)
 
     else:
-        print("command not found, refer the documentation in https://github.com/binodmx/wso2-apim-restful-api-cli")
+        print("Command is not found, refer the documentation in https://github.com/binodmx/wso2-apim-restful-api-cli")
     print()
