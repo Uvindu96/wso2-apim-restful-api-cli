@@ -6,21 +6,16 @@ import base64
 requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 
-'''
-Introduction
-'''
+# Introduction
 
 
 host = "https://localhost:9443"
 basePath = "/api/am/store/v0.14"
 
 
-'''
-Getting started
-'''
+# Getting started
 
 
-# return response
 def registerClient():
     url = host + "/client-registration/v0.14/register"
     headers = {
@@ -38,7 +33,6 @@ def registerClient():
     return response
 
 
-# return response
 def generateAccessToken(clientData, scope):
     url = "https://localhost:8243/token"
     headers = {
@@ -54,12 +48,9 @@ def generateAccessToken(clientData, scope):
     return response
 
 
-'''
-API (Collection)
-'''
+# API (Collection)
 
 
-# return response
 def viewApis():
     url = host + basePath + "/apis"
     response = requests.get(url, verify=False)

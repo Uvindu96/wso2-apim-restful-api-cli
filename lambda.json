@@ -1,0 +1,49 @@
+{
+    "businessInformation": {
+        "businessOwner": "John Ray",
+        "businessOwnerEmail": "marketing@awslambda.com",
+        "technicalOwner": "John Ray",
+        "technicalOwnerEmail": "architecture@awslambda.com"
+    },
+    "context": "/awslambda",
+    "description": "This is a simple API for AWS Lambda functions invocations.",
+    "endpointConfig": {
+        "endpoint_type": "awslambda",
+        "amznAccessKey": "accessKey",
+        "amznSecretKey": "secretKey",
+        "production_endpoints": {
+            "url": ""
+        },
+        "sandbox_endpoints": {
+            "url": ""
+        }
+    },
+    "gatewayEnvironments": [
+        "Production and Sandbox"
+    ],
+    "name": "AWSLambdaAPI",
+    "operations": [
+        {
+            "authType": "Application & Application User",
+            "target": "/random-number",
+            "throttlingPolicy": "Unlimited",
+            "verb": "POST",
+            "amznResourceName": "hibinta"
+        }
+    ],
+    "policies": [
+        "Unlimited"
+    ],
+    "securityScheme": [
+        "oauth2"
+    ],
+    "tags": [
+        "awslambda"
+    ],
+    "transport": [
+        "http",
+        "https"
+    ],
+    "version": "1.0.0",
+    "visibility": "PUBLIC"
+}

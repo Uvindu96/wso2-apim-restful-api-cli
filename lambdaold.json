@@ -1,7 +1,7 @@
 {
-    "name": "AWSLambda100",
+    "name": "AWSLambdaAPI",
     "description": "This document describe a RESTFul API for AWS Lambda function invocations.\r\n",
-    "context": "/lambda100",
+    "context": "/lambda",
     "version": "1.0.0",
     "provider": "admin",
     "apiDefinition":  "{\"paths\":{\"/get-random-num\":{\"post\":{\"amznResourceName\":\"arn:aws:lambda:us-east-2:572100981605:function:random-number-generator\",\"x-auth-type\":\"Application & Application User\",\"x-throttling-tier\":\"Unlimited\",\"description\":\"Get a random number\",\"parameters\":[{\"schema\":{\"type\":\"object\",\"properties\":{\"payload\":{\"min\":\"\", \"max\":\"\"}}},\"description\":\"Define min and max\",\"name\":\"body\",\"required\":true,\"in\":\"body\"}],\"responses\":{\"200\":{\"description\":\"Generated.\"}}}}},\"swagger\":\"2.0\",\"info\":{\"title\":\"PizzaShackAPI2\",\"version\":\"1.0.0\"}}",
@@ -16,7 +16,7 @@
       "http",
       "https"
     ],
-    "tags": ["pizza"],
+    "tags": ["aws"],
     "tiers": ["Unlimited"],
     "maxTps":    {
       "sandbox": 5000,
@@ -24,7 +24,7 @@
     },
     "visibility": "PUBLIC",
     "visibleRoles": [],
-    "endpointConfig": "{\"endpoint_type\":\"awslambda\",\"amznAccessKey\":\"AKIAYKM7AGNSTGM76FNK\",\"amznSecretKey\":\"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\"}",
+    "endpointConfig": "{\"endpoint_type\":\"awslambda\",\"amznAccessKey\":\"AKIAYKM7AGNSSWX3YTYX\",\"amznSecretKey\":\"8gDOgyX0cfd0YnuzSsi2UGzCcL/ANOQPAI0Yuwdx\",\\\"production_endpoints\\\":{\\\"url\\\": \\\"https:\\/\\/localhost:9443\\/am\\/sample\\/pizzashack\\/v1\\/api\\/\\\"},\\\"sandbox_endpoints\\\":{\\\"url\\\":\\\"https:\\/\\/localhost:9443\\/am\\/sample\\/pizzashack\\/v1\\/api\\/\\\"}}",
     "endpointSecurity":    {
       "username": "user",
       "type": "basic",
@@ -35,10 +35,10 @@
     "subscriptionAvailability": null,
     "subscriptionAvailableTenants": [],
     "businessInformation":    {
-      "businessOwnerEmail": "marketing@pizzashack.com",
-      "technicalOwnerEmail": "architecture@pizzashack.com",
-      "technicalOwner": "John Doe",
-      "businessOwner": "Jane Roe"
+      "businessOwnerEmail": "marketing@wso2.com",
+      "technicalOwnerEmail": "architecture@wso2.com",
+      "technicalOwner": "Binzi Binz",
+      "businessOwner": "Binzi Binz"
     },
     "corsConfiguration":    {
       "accessControlAllowOrigins": ["*"],

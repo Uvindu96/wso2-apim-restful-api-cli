@@ -10,7 +10,8 @@ requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.
 
 
 host = "https://localhost:9443"
-basePath = "/api/am/publisher/v0.14"
+tgs = "https://localhost:8243"
+basePath = "/api/am/publisher/v1.0"
 
 
 # Getting started
@@ -34,7 +35,7 @@ def registerClient():
 
 
 def generateAccessToken(clientData, scope):
-    url = "https://localhost:8243/token"
+    url = tgs + "/token"
     headers = {
         "Authorization": "Basic " + base64.b64encode(str(clientData['clientId'] + ":" + clientData['clientSecret']).encode()).decode("utf-8")
     }
@@ -226,3 +227,139 @@ def createApi(createAccessToken, jsonFileName):
 
 
 # Application (Individual)
+
+
+def viewApplication(createAccessToken, applicationId):
+    url = host + basePath + "/applications/%s" % applicationId
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# Certificates (Collection)
+
+
+def viewCertificates(createAccessToken):
+    url = host + basePath + "/certificates"
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken,
+        "Content-Type": "application/json"
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+# Certificates (Individual)
+
+
+def downloadCertificate(createAccessToken, alias):
+    url = host + basePath + "/certificates/%s/content" % alias
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken,
+        "accept": "application/json"
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    if response.status_code == 200:
+        with open(alias + 'cer', 'wb') as cert:
+            cert.write(response.content)
+    return response
+
+
+def deleteCertificate(createAccessToken, alias):
+    url = host + basePath + "/certificates/%s" % alias
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken
+    }
+    response = requests.delete(url, headers=headers, verify=False)
+    return response
+
+
+def viewCertificate(createAccessToken, alias):
+    url = host + basePath + "/certificates/%s" % alias
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken,
+        "accept": "application/json"
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
+
+
+def updateCertificate(createAccessToken, alias, certificate):
+    url = host + basePath + "/certificates/%s" % alias
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken,
+        "Content-Type": "multipart/form-data"
+    }
+    files = {
+        "certificate": certificate,
+    }
+    response = requests.put(url, headers=headers, files=files, verify=False)
+    return response
+
+
+def uploadCertificate(createAccessToken, alias, certificate, endpoint):
+    url = host + basePath + "/certificates"
+    headers = {
+        "Authorization": "Bearer %s" % createAccessToken,
+        "Content-Type": "multipart/form-data"
+    }
+    files = {
+        "alias": alias,
+        "certificate": certificate,
+        "endpoint": endpoint
+    }
+    response = requests.post(url, headers=headers, files=files, verify=False)
+    return response
+
+
+# ClientCertificates (Collection)
+
+
+# ClientCertificates (Individual)
+
+
+# Document (Collection)
+
+
+# Document (Individual)
+
+
+# Environment (Collection)
+
+
+# Mediation Policy (Collection)
+
+
+# Mediation Policy (Individual)
+
+
+# Subscription (Collection)
+
+
+# Subscription (Individual)
+
+
+# Throttling Tier (Collection)
+
+
+# Throttling Tier (Individual)
+
+
+# Workflow (Individual)
+
+
+# Wsdl (Individual)
+
+
+# AWS Lambda (Individual)
+
+
+def viewARNs(viewAccessToken, apiId):
+    url = host + basePath + "/apis/%s/arns" % apiId
+    headers = {
+        "Authorization": "Bearer %s" % viewAccessToken
+    }
+    response = requests.get(url, headers=headers, verify=False)
+    return response
