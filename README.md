@@ -45,4 +45,5 @@ type `refresh` and press enter. To close the CLI type `exit` and press enter.
 #### Workflows (Individual)
 #### WSDL (Individual)
 ## Store
+
 ## Admin
